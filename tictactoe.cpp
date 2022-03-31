@@ -2,8 +2,6 @@
 #include <stdlib.h>
 
 char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
-bool checkValidMove = true;
-bool checkWon = false;
 
 void printBoard(){
     std::cout << "\t\t    Tic-Tac-Toe\n\n";
@@ -21,37 +19,26 @@ void printBoard(){
 
 
 
- void player1Move(char boardPos){
-    int checker = 0;
+bool playerMove(char boardPos, int turnCount){
     for(int i = 0; i < 3; ++i){
         for(int j = 0; j < 3; ++j){
             if(board[i][j] == boardPos){
-                board[i][j] = 'X';
-                checkValidMove = true;
-                checker = 1;
+                if(turnCount % 2 == 0){
+                    board[i][j] = 'X';
+                    return true;
+                }
+                else{
+                    board[i][j] = 'O';
+                    return true;
+                }
             }
             
         }
     }
-    if(checker == 0){checkValidMove = false;}
+    return false;
 }
 
-void player2Move(char boardPos){
-    int checker = 0;
-    for(int i = 0; i < 3; ++i){
-        for(int j = 0; j < 3; ++j){
-            if(board[i][j] == boardPos){
-                board[i][j] = 'O';
-                checkValidMove = true;
-                checker = 1;
-            }
-            
-        }
-    }
-    if(checker == 0) {checkValidMove = false;}
-}
-
-void checkIfGameWon(char gameBoard[3][3]){
+bool checkIfGameWon(char gameBoard[3][3]){
     if(((gameBoard[0][0] == gameBoard[0][1]) && gameBoard[0][1] == gameBoard[0][2])
     ||((gameBoard[1][0] == gameBoard[1][1]) && gameBoard[1][1] == gameBoard[1][2])
     ||((gameBoard[2][0] == gameBoard[2][1]) && gameBoard[2][1] == gameBoard[2][2])
@@ -60,11 +47,14 @@ void checkIfGameWon(char gameBoard[3][3]){
     ||((gameBoard[0][0] == gameBoard[1][0]) && gameBoard[1][0] == gameBoard[2][0])
     ||((gameBoard[0][1] == gameBoard[1][1]) && gameBoard[1][1] == gameBoard[2][1])
     ||((gameBoard[0][2] == gameBoard[1][2]) && gameBoard[1][2] == gameBoard[2][2])){
-        checkWon = true;
+        return true;
     }
+    return false;
 }
 
 int main(){
+    bool checkWon = false;
+    bool checkValidMove = true;
     int turnCount = 0;
     char playPos;
     while(!checkWon && turnCount < 9){
@@ -72,26 +62,26 @@ int main(){
             printBoard();
             std::cout << "Player 1's Turn. Please choose a spot on the board to play (1 - 9):\n";
             std::cin >> playPos;
-            player1Move(playPos);
+            checkValidMove = playerMove(playPos, turnCount);
             while(checkValidMove == false){
                 std::cout << "Invalid move! Pick again:\n";
                 std::cin >> playPos;
-                player1Move(playPos);
+                checkValidMove = playerMove(playPos, turnCount);
                 }
-            checkIfGameWon(board);
+            checkWon = checkIfGameWon(board);
             ++turnCount;
         }
         else{
             printBoard();
             std::cout << "Player 2's Turn. Please choose a spot on the board to play (1 - 9):\n";
             std::cin >> playPos;
-            player2Move(playPos);
+            checkValidMove = playerMove(playPos, turnCount);
             while(checkValidMove == false){
                 std::cout << "Invalid move! Pick again:\n";
                 std::cin >> playPos;
-                player2Move(playPos);
+                checkValidMove = playerMove(playPos, turnCount);
                 }
-            checkIfGameWon(board);
+            checkWon = checkIfGameWon(board);
             ++turnCount;
         }
     }
@@ -104,5 +94,4 @@ int main(){
     }else{
         std::cout << "\t\t    Game Over!\n\t\t  Player 1 wins!";
     }
-
 }
