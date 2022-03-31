@@ -17,7 +17,6 @@ void printBoard(){
     std::cout << "\t\t  "<<board[2][0] << "  |  " << board[2][1] << "  |  " << board[2][2] << " \n";
     std::cout << "\t\t     |     |     \n\n";
     std::cout << "PLAYER 1 IS X's \t\t  PLAYER 2 IS O's\n";
-
 }
 
 
@@ -68,7 +67,6 @@ void checkIfGameWon(char gameBoard[3][3]){
 int main(){
     int turnCount = 0;
     char playPos;
-    int winner = 1;
     while(!checkWon && turnCount < 9){
         if(turnCount % 2 == 0){
             printBoard();
@@ -102,10 +100,9 @@ int main(){
         std::cout << "\t\t    Game Over!\n\t\t    Tie Game!";
     }
     else if(turnCount % 2 == 0) {
-        winner = 2;
-        std::cout << "\t\t    Game Over!\n\t\t  Player " << winner << " wins!";
+        std::cout << "\t\t    Game Over!\n\t\t  Player 2 wins!";
     }else{
-        std::cout << "\t\t    Game Over!\n\t\t  Player " << winner << " wins!";
+        std::cout << "\t\t    Game Over!\n\t\t  Player 1 wins!";
     }
 
 }
